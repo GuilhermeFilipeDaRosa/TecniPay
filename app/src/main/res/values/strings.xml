@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TecniPay</string>
+    <string name="credito">CRÉDITO</string>
+    <string name="debito">DÉBITO</string>
+</resources>

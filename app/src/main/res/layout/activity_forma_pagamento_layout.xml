@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/activity_forma_pagamento_credito"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/credito"
+        android:layout_centerInParent="true"
+        android:textSize="35sp"/>
+
+    <Button
+        android:id="@+id/activity_forma_pagamento_debito"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_forma_pagamento_credito"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="@string/debito"
+        android:textSize="35sp" />
+</RelativeLayout>
