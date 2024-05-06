@@ -9,7 +9,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class PrecoActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +26,7 @@ public class PrecoActivity extends AppCompatActivity {
     }
 
     private void abrirActivityFormaPagamento(EditText campoPreco) {
-        Intent intent = new Intent(PrecoActivity.this, FormaPagamentoActivity.class);
+        Intent intent = new Intent(MainActivity.this, FormaPagamentoActivity.class);
         intent.putExtra("preco", campoPreco.getAlpha());
 
         startActivity(intent);
