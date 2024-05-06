@@ -31,7 +31,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
@@ -39,4 +38,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.github.faranjit:currency-edittext:1.0.1")
     implementation("com.cielo.lio:order-manager:1.8.6")
+    //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+    implementation(files("./dir/libposdigital-1.8.1-13-release.aar"))
 }

@@ -1,12 +1,13 @@
 package com.tecnicon.tecnipay;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.getnet.posdigital.PosDigital;
 
 import cielo.orders.domain.Credentials;
 import cielo.sdk.order.OrderManager;
@@ -24,20 +25,25 @@ public class FormaPagamentoActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_forma_pagamento_layout);
 
-        adicionarEventListeners();
+        //inicializarCieloPagamento(); está com problema
+        //Caused by: android.content.pm.PackageManager$NameNotFoundException: cielo.launcher
+
+        connectPosDigitalService(); //Getnet
+
+        //adicionarEventListeners(); ToDo
     }
 
     private void adicionarEventListeners() {
         Button buttonDebito = findViewById(R.id.activity_forma_pagamento_debito);
 
         buttonDebito.setOnClickListener(v -> {
-            inicializarCieloPagamento(FormaPagamentoActivity.this);
+
         });
     }
 
-    private void inicializarCieloPagamento(Context context) {
+    private void inicializarCieloPagamento() {
         Credentials credentials = new Credentials(CLIENT_ID, ACCESS_TOKEN);
-        OrderManager orderManager = new OrderManager(credentials, context);
+        OrderManager orderManager = new OrderManager(credentials, this);
 
         ServiceBindListener serviceBindListener = new ServiceBindListener() {
 
@@ -60,6 +66,33 @@ public class FormaPagamentoActivity extends AppCompatActivity {
             }
         };
 
-        orderManager.bind(context, serviceBindListener);
+        orderManager.bind(this, serviceBindListener);
+    }
+
+    private void connectPosDigitalService() {
+        PosDigital.BindCallback bindCallback = new PosDigital.BindCallback() {
+            @Override
+            public void onError(Exception e) {
+                Log.i("Getnet", "onError");
+            }
+
+            @Override
+            public void onConnected() {
+                Log.i("Getnet", "onConnected");
+            }
+
+            @Override
+            public void onDisconnected() {
+                Log.i("Getnet", "onDisconnected");
+            }
+        };
+
+        PosDigital.register(FormaPagamentoActivity.this, bindCallback);
+
+        if (PosDigital.getInstance().isInitiated()){
+            Log.i("Getnet", "isInitiated");
+        } else {
+            Log.i("Getnet", "not isInitiated");
+        }
     }
 }
