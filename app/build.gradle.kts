@@ -36,7 +36,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.github.faranjit:currency-edittext:1.0.1")
+    //implementation("com.github.faranjit:currency-edittext:1.0.1") da problema na maquininha
     implementation("com.cielo.lio:order-manager:1.8.6")
     //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
     implementation(files("./dir/libposdigital-1.8.1-13-release.aar"))

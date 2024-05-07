@@ -1,21 +1,19 @@
 package com.tecnicon.tecnipay;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.getnet.posdigital.PosDigital;
+import com.tecnicon.tecnipay.service.cielo.CieloService;
+import com.tecnicon.tecnipay.service.getnet.GetnetService;
 
-import cielo.orders.domain.Credentials;
-import cielo.sdk.order.OrderManager;
-import cielo.sdk.order.ServiceBindListener;
+import cielo.sdk.order.payment.PaymentCode;
 
 public class FormaPagamentoActivity extends AppCompatActivity {
-    private final String CLIENT_ID = "JddcuL6WjnXZm8pUwIy0LbAHEiA7ou927Np9esj5xu27nsyI7S";
-    private final String ACCESS_TOKEN = "eZ0ZMlSHWqEesjHPgRtV6D3oG6q4kDEkjRmqeqmP7vOABUVT9E";
+
+    private CieloService cieloService;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,74 +23,24 @@ public class FormaPagamentoActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_forma_pagamento_layout);
 
-        //inicializarCieloPagamento(); está com problema
-        //Caused by: android.content.pm.PackageManager$NameNotFoundException: cielo.launcher
+        //cieloService = new CieloService(this);
 
-        connectPosDigitalService(); //Getnet
+        GetnetService.connectPosDigitalService(this); //Getnet, Unable to start service Intent { cmp=com.getnet.posdigital.service/.MainService } U=0: not found
 
-        //adicionarEventListeners(); ToDo
+        //adicionarEventListeners();
     }
 
     private void adicionarEventListeners() {
         Button buttonDebito = findViewById(R.id.activity_forma_pagamento_debito);
 
         buttonDebito.setOnClickListener(v -> {
-
+            cieloService.fazerPagamento(PaymentCode.DEBITO_AVISTA);
         });
-    }
 
-    private void inicializarCieloPagamento() {
-        Credentials credentials = new Credentials(CLIENT_ID, ACCESS_TOKEN);
-        OrderManager orderManager = new OrderManager(credentials, this);
+        Button buttonCredito = findViewById(R.id.activity_forma_pagamento_credito);
 
-        ServiceBindListener serviceBindListener = new ServiceBindListener() {
-
-            @Override public void onServiceBoundError(Throwable throwable) {
-                //Ocorreu um erro ao tentar se conectar com o serviço OrderManager
-                Log.e("cielo", "onServiceBoundError: " + throwable.getMessage());
-            }
-
-            @Override
-            public void onServiceBound() {
-                //Você deve garantir que sua aplicação se conectou com a LIO a partir desse listener
-                //A partir desse momento você pode utilizar as funções do OrderManager, caso contrário uma exceção será lançada.
-                Log.i("cielo", "onServiceBound: deu boa");
-            }
-
-            @Override
-            public void onServiceUnbound() {
-                // O serviço foi desvinculado
-                Log.i("cielo", "onServiceUnbound: desconectado");
-            }
-        };
-
-        orderManager.bind(this, serviceBindListener);
-    }
-
-    private void connectPosDigitalService() {
-        PosDigital.BindCallback bindCallback = new PosDigital.BindCallback() {
-            @Override
-            public void onError(Exception e) {
-                Log.i("Getnet", "onError");
-            }
-
-            @Override
-            public void onConnected() {
-                Log.i("Getnet", "onConnected");
-            }
-
-            @Override
-            public void onDisconnected() {
-                Log.i("Getnet", "onDisconnected");
-            }
-        };
-
-        PosDigital.register(FormaPagamentoActivity.this, bindCallback);
-
-        if (PosDigital.getInstance().isInitiated()){
-            Log.i("Getnet", "isInitiated");
-        } else {
-            Log.i("Getnet", "not isInitiated");
-        }
+        buttonCredito.setOnClickListener(v -> {
+            cieloService.fazerPagamento(PaymentCode.CREDITO_AVISTA);
+        });
     }
 }
